@@ -1,6 +1,3 @@
-/**
- * J<i>ava</i> U<i>tilities</i> for S<i>tudents</i>
- */
 package jus.aor.mobilagent.kernel;
 
 import java.io.Serializable;
@@ -16,6 +13,7 @@ public class Etape implements Serializable{
 	protected URI server;
 	/** l'action à réaliser à cette étape */
 	protected _Action action;
+	
 	/**
 	 * Création d'une étape à partir d'une adresse de serveur et d'une action.
 	 * @param server le serveur de l'étape
@@ -25,9 +23,10 @@ public class Etape implements Serializable{
 		this.server = server;
 		this.action = action;
 	}
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
+
+	
 	@Override
-	public String toString() {return server+"("+action+")";}
+	public String toString() {
+		return server+"("+action+")";
+	}
 }
