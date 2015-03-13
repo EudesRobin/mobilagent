@@ -9,6 +9,7 @@ import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.rmi.RMISecurityManager;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -43,7 +44,7 @@ public class Starter{
 	 * 
 	 * @param args
 	 */
-	public Starter(String... args){
+	public Starter(String... args){	
 		// récupération du niveau de log
 		java.util.logging.Level level;
 		try {
@@ -57,7 +58,7 @@ public class Starter{
 			/* Mise en place du logger pour tracer l'application */
 			String loggerName = "jus/aor/mobilagent/"+InetAddress.getLocalHost().getHostName()+"/"+args[1];
 			logger = Logger.getLogger(loggerName);
-//			logger.setUseParentHandlers(false);
+			//logger.setUseParentHandlers(false);
 			logger.addHandler(new IOHandler());
 			logger.setLevel(level);
 			/* Récupération d'informations de configuration */

@@ -40,30 +40,43 @@ class Route implements Iterable<Etape>, Serializable{
 	 * @return la prochaine étape.
 	 */
 	Etape get() throws NoSuchElementException {
-		return null;
-		//A COMPLETER
+		//MODIF
+		if(hasNext()){
+			return route.get(0);
+		}else{
+			return retour;
+		}
 	}
 	/**
 	 * Restitue la prochaine étape et élimine de la route ou la dernière qui est la base de départ.
 	 * @return la prochaine étape.
 	 */
 	Etape next() throws NoSuchElementException {
-		return null;
-		//A COMPLETER
+		//MODIF
+		if(route.isEmpty()){
+			hasNext = false;
+			return retour;
+		}else{
+			Etape step = this.get();
+			route.remove(0);
+			return step;
+		}	
 	}
 	/**
 	 * Il y a-t-il encore une étape à parcourir.
 	 * @return vrai si une étape est possible.
 	 */
-	public boolean hasNext() { return hasNext;}
+	public boolean hasNext(){
+		return hasNext;
+	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Iterable#iterator()
-	 */
-	public Iterator<Etape> iterator(){return route.iterator();}
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
+
+	public Iterator<Etape> iterator(){
+		return route.iterator();
+	}
+
 	@Override
-	public String toString() {return route.toString().replaceAll(", ","->");}
+	public String toString() {
+		return route.toString().replaceAll(", ","->");
+	}
 }
