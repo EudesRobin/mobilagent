@@ -7,7 +7,6 @@ import java.lang.reflect.Field;
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.URL;
-
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -63,7 +62,23 @@ public final class Server {
 	 */
 	public final void addService(String name, String classeName, String codeBase, Object... args) {
 		try {
-			//A COMPLETER
+			// add codebase
+			BAMServerClassLoader bms = new BAMServerClassLoader(null,this.getClass().getClassLoader());
+			bms.addURL(codeBase);
+			
+			/*
+			 * thx javadoc !
+			 * http://docs.oracle.com/javase/8/docs/api/java/lang/Class.html#forName-java.lang.String-boolean-java.lang.ClassLoader
+			 * We load the class
+			 */
+			Class<?> cl = Class.forName(classeName,true,this.getClass().getClassLoader());
+			
+			/*
+			 * Instance of this class = our "service"
+			 */
+			_Service<?> service = (_Service<?>)cl.getConstructor((Class<?>[]) args).newInstance(args);
+			agentServer.addService(name,service);
+			
 		}catch(Exception ex){
 			logger.log(Level.FINE," erreur durant le lancement du serveur"+this,ex);
 			return;
