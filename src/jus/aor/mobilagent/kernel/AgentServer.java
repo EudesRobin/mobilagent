@@ -31,5 +31,13 @@ public class AgentServer extends Thread {
 		}
 		
 	}
+	/**
+	 * Recupération d'un service
+	 * @param name nom du service
+	 * @return le service associé au nom
+	 */
+	public _Service<?> getService(String name){
+		return services.get(name);
+	}
 
 }

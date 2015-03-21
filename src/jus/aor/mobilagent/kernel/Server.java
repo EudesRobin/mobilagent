@@ -77,6 +77,8 @@ public final class Server {
 			 * Instance of this class = our "service"
 			 */
 			_Service<?> service = (_Service<?>)cl.getConstructor((Class<?>[]) args).newInstance(args);
+			
+			// add service to hashmap
 			agentServer.addService(name,service);
 			
 		}catch(Exception ex){
@@ -100,4 +102,5 @@ public final class Server {
 			return;
 		}
 	}
+	
 }
