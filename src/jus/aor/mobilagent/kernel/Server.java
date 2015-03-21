@@ -38,16 +38,16 @@ public final class Server {
 			/* mise en place du logger pour tracer l'application */
 			loggerName = "jus/aor/mobilagent/"+InetAddress.getLocalHost().getHostName()+"/"+this.name;
 			logger=Logger.getLogger(loggerName);
-			
+
 			/* démarrage du server d'agents mobiles attaché à cette machine */
 			agentServer = new AgentServer(name, port);
-			
+
 			/* temporisation de mise en place du server d'agents */
 			Thread.sleep(1000);
-			
+
 			/* lancement du thread du serveur */
 			agentServer.start();
-			
+
 		}catch(Exception ex){
 			logger.log(Level.FINE," erreur durant le lancement du serveur"+this,ex);
 			return;
@@ -65,22 +65,22 @@ public final class Server {
 			// add codebase
 			BAMServerClassLoader bms = new BAMServerClassLoader(null,this.getClass().getClassLoader());
 			bms.addURL(codeBase);
-			
+
 			/*
 			 * thx javadoc !
 			 * http://docs.oracle.com/javase/8/docs/api/java/lang/Class.html#forName-java.lang.String-boolean-java.lang.ClassLoader
 			 * We load the class
 			 */
 			Class<?> cl = Class.forName(classeName,true,this.getClass().getClassLoader());
-			
+
 			/*
 			 * Instance of this class = our "service"
 			 */
 			_Service<?> service = (_Service<?>)cl.getConstructor((Class<?>[]) args).newInstance(args);
-			
+
 			// add service to hashmap
 			agentServer.addService(name,service);
-			
+
 		}catch(Exception ex){
 			logger.log(Level.FINE," erreur durant le lancement du serveur"+this,ex);
 			return;
@@ -96,11 +96,47 @@ public final class Server {
 	 */
 	public final void deployAgent(String classeName, Object[] args, String codeBase, List<String> etapeAddress, List<String> etapeAction) {
 		try {
-			//A COMPLETER
+
+			BAMAgentClassLoader bma = new BAMAgentClassLoader(null,this.getClass().getClassLoader());
+			// add codebase of agent
+			bma.extractCode(codeBase);
+			// get class...
+			Class<?> cl = Class.forName(classeName, true, bma);
+			// get instance of this class...
+			Agent current_agent = (Agent) cl.getConstructor((Class<?>[]) args).newInstance(args);
+
+			// On initialise notre agent
+			current_agent.init(bma, agentServer,name);
+
+			logger.log(Level.INFO,"Debut déploiement agent");
+			// On ajoute les actions / etape !
+			if(etapeAddress.size()!=etapeAction.size()){
+				throw new Exception("Chaque etape doit avoir une action associée !");
+			}else{
+				for(int i=0;i<etapeAddress.size();i++){
+					
+					/*
+					 * thx javadoc:
+					 * http://docs.oracle.com/javase/7/docs/api/java/lang/reflect/Field.html
+					 */
+					
+					// on a le nom de l'action à exec, reste à recup la méthode associée...
+					Field f = current_agent.getClass().getDeclaredField(etapeAction.get(i));
+					_Action action = (_Action) f.get(current_agent); // get field of current object
+					
+					current_agent.addEtape(new Etape(new URI(etapeAddress.get(i)),action));
+					
+					logger.log(Level.INFO,"add etape : "+etapeAddress.get(i)+ " - action " +etapeAction.get(i));
+				}
+			}
+			logger.log(Level.INFO,"Deploiement agent terminé");
+			
+			new Thread(current_agent).start();
+
 		}catch(Exception ex){
 			logger.log(Level.FINE," erreur durant le lancement du serveur"+this,ex);
 			return;
 		}
 	}
-	
+
 }

@@ -45,6 +45,7 @@ public class Agent implements _Agent {
 	@Override
 	public void run() {
 		// TODO
+		// parcours des etapes...
 	}
 
 }

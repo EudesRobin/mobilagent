@@ -39,5 +39,11 @@ public class AgentServer extends Thread {
 	public _Service<?> getService(String name){
 		return services.get(name);
 	}
+	
+	
+	public void run() {
+		// TODO
+		// boucle de reception des agents..
+	}
 
 }
