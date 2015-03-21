@@ -71,6 +71,7 @@ public class Agent implements _Agent {
 				
 				// envoi jar
 				output.writeObject(bma.jarlib);
+				
 				// envoie de l'agent
 				output.writeObject(this);
 				

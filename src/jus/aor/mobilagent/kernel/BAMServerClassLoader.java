@@ -6,7 +6,6 @@ package jus.aor.mobilagent.kernel;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.net.URLStreamHandlerFactory;
 
 /**
  * @author eudes

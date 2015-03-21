@@ -63,7 +63,7 @@ public final class Server {
 	public final void addService(String name, String classeName, String codeBase, Object... args) {
 		try {
 			// add codebase
-			BAMServerClassLoader bms = new BAMServerClassLoader(null,this.getClass().getClassLoader());
+			BAMServerClassLoader bms = new BAMServerClassLoader(new URL[]{},this.getClass().getClassLoader());
 			bms.addURL(codeBase);
 
 			/*
@@ -80,6 +80,8 @@ public final class Server {
 
 			// add service to hashmap
 			agentServer.addService(name,service);
+			
+			bms.close();
 
 		}catch(Exception ex){
 			logger.log(Level.FINE," erreur durant le lancement du serveur"+this,ex);
@@ -97,7 +99,7 @@ public final class Server {
 	public final void deployAgent(String classeName, Object[] args, String codeBase, List<String> etapeAddress, List<String> etapeAction) {
 		try {
 
-			BAMAgentClassLoader bma = new BAMAgentClassLoader(null,this.getClass().getClassLoader());
+			BAMAgentClassLoader bma = new BAMAgentClassLoader(new URL[]{},this.getClass().getClassLoader());
 			// add codebase of agent
 			bma.extractCode(codeBase);
 			// get class...
