@@ -39,10 +39,16 @@ public final class Server {
 			/* mise en place du logger pour tracer l'application */
 			loggerName = "jus/aor/mobilagent/"+InetAddress.getLocalHost().getHostName()+"/"+this.name;
 			logger=Logger.getLogger(loggerName);
+			
 			/* démarrage du server d'agents mobiles attaché à cette machine */
-			//A COMPLETER
+			agentServer = new AgentServer(name, port);
+			
 			/* temporisation de mise en place du server d'agents */
 			Thread.sleep(1000);
+			
+			/* lancement du thread du serveur */
+			agentServer.start();
+			
 		}catch(Exception ex){
 			logger.log(Level.FINE," erreur durant le lancement du serveur"+this,ex);
 			return;

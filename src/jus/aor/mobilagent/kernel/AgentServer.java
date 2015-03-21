@@ -12,7 +12,7 @@ public class AgentServer extends Thread {
 	/**
 	 * 
 	 */
-	public AgentServer() {
+	public AgentServer(String name,int port) {
 		// TODO Auto-generated constructor stub
 	}
 
