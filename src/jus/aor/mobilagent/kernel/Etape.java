@@ -29,4 +29,12 @@ public class Etape implements Serializable{
 	public String toString() {
 		return server+"("+action+")";
 	}
+	
+	/**
+	 * get action of this step
+	 * @return action to do...
+	 */
+	_Action get_action(){
+		return action;
+	}
 }

@@ -1,7 +1,12 @@
 package jus.aor.mobilagent.kernel;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.UnknownHostException;
+import java.util.NoSuchElementException;
 
 public class Agent implements _Agent {
 
@@ -10,7 +15,7 @@ public class Agent implements _Agent {
 	Route route;
 	BAMAgentClassLoader bma;
 	String srvname;
-	
+	boolean done = false;
 
 
 	@Override
@@ -18,6 +23,7 @@ public class Agent implements _Agent {
 		srv=agentServer;
 		srv.setName(serverName);
 		srvname = serverName;
+		
 		
 		try {
 			//init, on créé une route, étape -> action "nihil"
@@ -44,8 +50,47 @@ public class Agent implements _Agent {
 
 	@Override
 	public void run() {
-		// TODO
-		// parcours des etapes...
+		
+		// On a une action a effectuer
+		if(!done){
+			route.next().get_action().execute();
+		}
+		
+		// On en a pas terminé ;)
+		if(route.hasNext()){
+			try {
+				// notre agent part vers sa prochaine dest...
+				done=true;
+				System.out.println("Envoie de l'agent vers "+route.get().server.getHost()+":"+route.get().server.getPort());
+				
+				// construction du socket
+				Socket socket_agent = new Socket(route.get().server.getHost(),route.get().server.getPort());
+				
+				// construction de l'output stream
+				ObjectOutputStream output = new ObjectOutputStream(socket_agent.getOutputStream());
+				
+				// envoi jar
+				output.writeObject(bma.jarlib);
+				// envoie de l'agent
+				output.writeObject(this);
+				
+				// close
+				output.close();
+				socket_agent.close();
+				
+			} catch (UnknownHostException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NoSuchElementException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+		}
 	}
 
 }

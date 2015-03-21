@@ -17,7 +17,7 @@ import java.util.Map.Entry;
 public class BAMAgentClassLoader extends URLClassLoader {
 
 	HashMap<String,byte[]> lib = new HashMap<String,byte[]>();
-	private Jar jarlib;
+	Jar jarlib;
 	
 	public BAMAgentClassLoader(URL[] urls, ClassLoader parent) {
 		super(urls, parent);	
