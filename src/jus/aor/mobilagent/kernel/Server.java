@@ -3,6 +3,7 @@
  */
 package jus.aor.mobilagent.kernel;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.net.InetAddress;
 import java.net.URI;
@@ -41,15 +42,15 @@ public final class Server {
 
 			/* démarrage du server d'agents mobiles attaché à cette machine */
 			agentServer = new AgentServer(name, port);
-
+			
 			/* temporisation de mise en place du server d'agents */
 			Thread.sleep(1000);
-
+			
 			/* lancement du thread du serveur */
 			agentServer.start();
 
 		}catch(Exception ex){
-			logger.log(Level.FINE," erreur durant le lancement du serveur"+this,ex);
+			logger.log(Level.FINE," erreur durant le lancement du serveur - server constr\n"+ex.toString(),ex);
 			return;
 		}
 	}
@@ -84,7 +85,7 @@ public final class Server {
 			bms.close();
 
 		}catch(Exception ex){
-			logger.log(Level.FINE," erreur durant le lancement du serveur"+this,ex);
+			logger.log(Level.FINE," erreur durant le lancement du serveur - add srv \n"+ex.toString(),ex);
 			return;
 		}
 	}
@@ -98,19 +99,20 @@ public final class Server {
 	 */
 	public final void deployAgent(String classeName, Object[] args, String codeBase, List<String> etapeAddress, List<String> etapeAction) {
 		try {
-
 			BAMAgentClassLoader bma = new BAMAgentClassLoader(new URL[]{},this.getClass().getClassLoader());
 			// add codebase of agent
 			bma.extractCode(codeBase);
 			// get class...
-			Class<?> cl = Class.forName(classeName, true, bma);
+			Class<?> cl = (Class<?>)Class.forName(classeName, true, bma);
+			// get constructor
+			Constructor<?> cr = cl.getConstructor(Object[].class);
 			// get instance of this class...
-			Agent current_agent = (Agent) cl.getConstructor((Class<?>[]) args).newInstance(args);
-
+			Agent current_agent = (Agent) cr.newInstance(new Object[]{args});
 			// On initialise notre agent
 			current_agent.init(bma, agentServer,name);
 
 			logger.log(Level.INFO,"Debut déploiement agent");
+			
 			// On ajoute les actions / etape !
 			if(etapeAddress.size()!=etapeAction.size()){
 				throw new Exception("Chaque etape doit avoir une action associée !");
@@ -124,6 +126,7 @@ public final class Server {
 					
 					// on a le nom de l'action à exec, reste à recup la méthode associée...
 					Field f = current_agent.getClass().getDeclaredField(etapeAction.get(i));
+					f.setAccessible(true); // http://stackoverflow.com/questions/3567372/access-to-private-inherited-fields-via-reflection-in-java
 					_Action action = (_Action) f.get(current_agent); // get field of current object
 					
 					current_agent.addEtape(new Etape(new URI(etapeAddress.get(i)),action));
@@ -131,12 +134,13 @@ public final class Server {
 					logger.log(Level.INFO,"add etape : "+etapeAddress.get(i)+ " - action " +etapeAction.get(i));
 				}
 			}
+			logger.log(Level.INFO,current_agent.route.toString());
 			logger.log(Level.INFO,"Deploiement agent terminé");
 			
 			new Thread(current_agent).start();
 
 		}catch(Exception ex){
-			logger.log(Level.FINE," erreur durant le lancement du serveur"+this,ex);
+			logger.log(Level.FINE," erreur durant le lancement du serveur - deploy agent \n"+ex.toString(),ex);
 			return;
 		}
 	}

@@ -21,12 +21,14 @@ public class AgentServer extends Thread {
 	private int port;
 	private HashMap<String,_Service<?>> services = new HashMap<String,_Service<?>>();
 	private BAMServerClassLoader bms;
+	
+	public AgentServer(String name,int port) throws MalformedURLException{
+			
+			this.name=name;
+			this.port=port;
+			URL jar = new URL("file:///lib/MobilagentServer.jar");
+			bms = new BAMServerClassLoader(new URL[]{jar},this.getClass().getClassLoader());
 
-	public AgentServer(String name,int port) throws MalformedURLException {
-		this.name=name;
-		this.port=port;
-		URL jar = new URL("file:///lib/MobilagentServer.jar");
-		bms = new BAMServerClassLoader(new URL[]{jar},this.getClass().getClassLoader());
 	}
 
 	/**
@@ -58,7 +60,6 @@ public class AgentServer extends Thread {
 			while(true){
 				// On accepte la connexion
 				Socket agent = socket.accept();
-
 				BAMAgentClassLoader bma = new BAMAgentClassLoader(new URL[]{},bms);
 
 				InputStream input = agent.getInputStream();
