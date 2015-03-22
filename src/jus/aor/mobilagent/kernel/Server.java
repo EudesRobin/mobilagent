@@ -134,7 +134,9 @@ public final class Server {
 					logger.log(Level.INFO,"add etape : "+etapeAddress.get(i)+ " - action " +etapeAction.get(i));
 				}
 			}
-			logger.log(Level.INFO,current_agent.route.toString());
+			if(etapeAddress.size()==0){
+				logger.log(Level.INFO,"Aucune étape ajoutée pour cet agent");
+			}
 			logger.log(Level.INFO,"Deploiement agent terminé");
 			
 			new Thread(current_agent).start();

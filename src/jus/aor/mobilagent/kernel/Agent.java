@@ -15,7 +15,7 @@ public class Agent implements _Agent {
 	Route route;
 	BAMAgentClassLoader bma;
 	String srvname;
-	boolean done = false;
+	boolean onsite=false;
 
 
 	@Override
@@ -23,15 +23,15 @@ public class Agent implements _Agent {
 		srv=agentServer;
 		srv.setName(serverName);
 		srvname = serverName;
-		
-		
+
+
 		try {
 			//init, on créé une route, étape -> action "nihil"
 			route = new Route(new Etape(new URI(serverName), _Action.NIHIL));
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	@Override
@@ -45,40 +45,47 @@ public class Agent implements _Agent {
 	@Override
 	public void addEtape(Etape etape) {
 		route.add(etape);
-
+		route.hasNext=true;
 	}
 
 	@Override
 	public void run() {
 		
-		// On a une action a effectuer
-		if(!done){
-			route.next().get_action().execute();
+		System.out.println("Je suis sur le serveur " + srvname);
+
+		if(onsite){
+			// j'effectue mon action sur le site
+			route.get().get_action().execute();
+			// je me positionne sur ma prochaine étape
+			route.next();
+			
+			onsite = false;
 		}
-		
+
 		// On en a pas terminé ;)
 		if(route.hasNext()){
 			try {
 				// notre agent part vers sa prochaine dest...
-				done=true;
-				System.out.println("Envoie de l'agent vers "+route.get().server.getHost()+":"+route.get().server.getPort());
-				
+				System.out.println("Envoie vers "+route.get().server.getHost()+":"+route.get().server.getPort());
+
 				// construction du socket
 				Socket socket_agent = new Socket(route.get().server.getHost(),route.get().server.getPort());
-				
+
 				// construction de l'output stream
 				ObjectOutputStream output = new ObjectOutputStream(socket_agent.getOutputStream());
-				
+
 				// envoi jar
 				output.writeObject(bma.jarlib);
-				
+
 				// envoie de l'agent
 				output.writeObject(this);
-				
+
 				// close
 				output.close();
 				socket_agent.close();
 				
+				onsite=true;
+
 			} catch (UnknownHostException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -89,9 +96,12 @@ public class Agent implements _Agent {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			
+
+
 		}
+		// final action
+		route.get().get_action().execute();
+
 	}
 
 }
