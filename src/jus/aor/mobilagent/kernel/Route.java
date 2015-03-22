@@ -28,7 +28,7 @@ class Route implements Iterable<Etape>, Serializable{
 	public Route(Etape retour) {
 		route = new LinkedList<Etape>();
 		this.retour = retour;
-		hasNext=false;
+		hasNext=true;
 	}
 	/**
 	 * Ajoute une étape en fin de route.
@@ -40,7 +40,7 @@ class Route implements Iterable<Etape>, Serializable{
 	 * @return la prochaine étape.
 	 */
 	Etape get() throws NoSuchElementException {
-		if(hasNext()){
+		if(route.size()>0){
 			return route.get(0);
 		}else{
 			return retour;
@@ -51,7 +51,8 @@ class Route implements Iterable<Etape>, Serializable{
 	 * @return la prochaine étape.
 	 */
 	Etape next() throws NoSuchElementException {
-		if(route.isEmpty()){
+		
+		if(route.size()==0){
 			hasNext = false;
 			return retour;
 		}else{

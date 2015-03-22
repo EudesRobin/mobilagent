@@ -3,7 +3,6 @@
  */
 package jus.aor.mobilagent.kernel;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.ServerSocket;
@@ -21,6 +20,7 @@ public class AgentServer extends Thread {
 	private int port;
 	private HashMap<String,_Service<?>> services = new HashMap<String,_Service<?>>();
 	private BAMServerClassLoader bms;
+	private boolean alive = true;
 	
 	public AgentServer(String name,int port) throws MalformedURLException{
 			
@@ -57,36 +57,30 @@ public class AgentServer extends Thread {
 		try {
 			ServerSocket socket = new ServerSocket(port);
 
-			while(true){
+			while(alive){
 				// On accepte la connexion
 				Socket agent = socket.accept();
+				System.out.println(" services dispo " + services.entrySet());
 				BAMAgentClassLoader bma = new BAMAgentClassLoader(new URL[]{},bms);
 
 				InputStream input = agent.getInputStream();
 				AgentInputStream agent_in = new AgentInputStream(input, bma);
 
 				// creation de l'agent...
-				try {
-					// get jar first
-					agent_in.loader.jarlib= (Jar) agent_in.readObject();
-					// get object then
-					Agent agent_object = (Agent) agent_in.readObject();
-					// init agent
-					agent_object.init(bma,this,name);
+					
+					Jar jarfile = (Jar)  agent_in.readObject();
+					agent_in.loader.extractCode(jarfile);
+					Agent agentob = (Agent) agent_in.readObject();
+					agentob.init(agent_in.loader, this, this.getName());
 
 					agent_in.close();
-					input.close();
+					
+					new Thread(agentob).start();
 
-					// l'agent effectue son action sur le srv
-					new Thread(agent_object).start();
-
-				} catch (ClassNotFoundException e) {
-					e.printStackTrace();
-				}
-
-				socket.close();
 			}	
-		} catch (IOException e) {
+			socket.close();
+			
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

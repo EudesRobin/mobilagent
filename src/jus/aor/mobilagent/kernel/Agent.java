@@ -5,14 +5,14 @@ import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-public class Agent implements _Agent {
+public class Agent implements _Agent  {
 
 	private static final long serialVersionUID = -5579606150122021510L;
-	AgentServer srv;
+	protected transient AgentServer srv;
 	Route route;
-	BAMAgentClassLoader bma;
-	String srvname;
-	boolean onsite=false;
+	protected transient BAMAgentClassLoader bma;
+	protected transient String srvname;
+	boolean todo=false;
 
 
 	@Override
@@ -25,6 +25,7 @@ public class Agent implements _Agent {
 		try {
 			//init, on créé une route, étape -> action "nihil"
 			route = new Route(new Etape(new URI(serverName), _Action.NIHIL));
+
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
@@ -50,20 +51,17 @@ public class Agent implements _Agent {
 
 		System.out.println("Serveur"+srvname);
 
-		// Test prochaine étape
-		while(route.hasNext()){
 
-			if(onsite){
-				System.out.println("Serveur"+srvname);
-				// j'effectue mon action sur le site
-				route.get().get_action().execute();
-				// je me positionne sur ma prochaine étape
-				route.next();
+		if(todo){
+			System.out.println("Serveur"+srvname);
 
-				onsite = false;
-			}else{
-
+			route.next().get_action().execute();
+		}
+		
+		if(route.hasNext()){
 				try {
+					todo=true;
+					
 					// notre agent part vers sa prochaine dest...
 					System.out.println("Envoie vers "+route.get().server.getHost()+":"+route.get().server.getPort());
 
@@ -73,29 +71,32 @@ public class Agent implements _Agent {
 					// construction de l'output stream
 					ObjectOutputStream output = new ObjectOutputStream(socket_agent.getOutputStream());
 
+					if(bma.jarlib == null ){
+						System.out.println("NULL JARFILE !");
+					}else{
+						System.out.println(" hashmap ... " + bma.lib.entrySet());
+					}
 					// envoi jar
 					output.writeObject(bma.jarlib);
+					System.out.println("jar envoyé");
 
 					// envoie de l'agent
 					output.writeObject(this);
-
+					System.out.println("agent envoyé");
 					// close
 					output.close();
 					socket_agent.close();
 
-					onsite=true;
+					
+					
+					System.out.println("Envoie terminé");
 
 				} catch (Exception e) {
 					e.printStackTrace();
+					
 				}
-
-			}
-
-
 		}
 
-		// Action finale, on est revenu sur notre srv de départ
-		route.get().get_action().execute();
 
 	}
 

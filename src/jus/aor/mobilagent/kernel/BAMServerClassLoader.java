@@ -3,16 +3,24 @@
  */
 package jus.aor.mobilagent.kernel;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.jar.JarException;
 
 /**
  * @author eudes
  *
  */
 public class BAMServerClassLoader extends URLClassLoader {
-
+	
+	HashMap<String,byte[]> lib = new HashMap<String,byte[]>();
+	Jar jarlib;
+	
+	
 	public BAMServerClassLoader(URL[] urls, ClassLoader parent) {
 		super(urls, parent);
 	}
@@ -23,13 +31,23 @@ public class BAMServerClassLoader extends URLClassLoader {
 	 * http://http://docs.oracle.com/javase/8/docs/api/java/net/URLClassLoader.html#addURL-java.net.URL-
 	 * 
 	 * @param filename url à ajouter au repository
+	 * @throws IOException 
+	 * @throws JarException 
 	 */
-	public void addURL(String filename){
-		try {
-			super.addURL(new URL(filename));
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
+	public void addURL(String filename) throws JarException, IOException{
+		add_jar(filename);
+		System.out.println("add srv " + lib.entrySet());
+	}
+
+	public void add_jar(String f) throws JarException, IOException{
+		if(jarlib==null){
+			jarlib = new Jar(f);
 		}
+		
+		for( Entry<String, byte[]> rsc: jarlib.classIterator()){
+			lib.put(rsc.getKey(),rsc.getValue());
+		}
+		
 	}
 
 }
