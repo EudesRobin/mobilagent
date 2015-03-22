@@ -8,10 +8,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
-
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -43,16 +43,20 @@ public class Starter{
 	 * 
 	 * @param args
 	 */
-	public Starter(String... args){	
+	public Starter(String... args){
+		
 		// récupération du niveau de log
 		java.util.logging.Level level;
+		/*
 		try {
-			level = Level.parse(System.getProperty("LEVEL"));			
+			level = Level.parse(System.getProperty("LEVEL"));
 		}catch(NullPointerException e) {
 			level=java.util.logging.Level.OFF;
 		}catch(IllegalArgumentException e) {
 			level=java.util.logging.Level.SEVERE;
-		}
+		} */
+		level=java.util.logging.Level.ALL;
+		
 		try {
 			/* Mise en place du logger pour tracer l'application */
 			String loggerName = "jus/aor/mobilagent/"+InetAddress.getLocalHost().getHostName()+"/"+args[1];
@@ -71,13 +75,13 @@ public class Starter{
 			// déploiement d'agents
 			deployAgents();
 		}catch(Exception ex){
-			logger.log(Level.FINE,"Ce programme nécessite un argument : <conf file> <name server>",ex);
+			logger.log(Level.FINE,"Ce programme nécessite un argument : <conf file> <name server>\n"+ex.toString(),ex);
 			return;
 		}
 	}
 	@SuppressWarnings("unchecked")
 	protected void createServer(int port, String name) throws MalformedURLException, ClassNotFoundException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-		loader = new BAMServerClassLoader(new URL[]{new URL("file:///.../MobilagentServer.jar")},this.getClass().getClassLoader());
+		loader = new BAMServerClassLoader(new URL[]{new URL("file:///lib/MobilagentServer.jar")},this.getClass().getClassLoader());
 		classe = (Class<jus.aor.mobilagent.kernel.Server>)Class.forName("jus.aor.mobilagent.kernel.Server",true,loader);
 		server = classe.getConstructor(int.class,String.class).newInstance(port,name);
 	}
@@ -179,7 +183,9 @@ public class Starter{
 	 * @param args
 	 */
 	public static void main(String... args) {
-		if(System.getSecurityManager() == null)System.setSecurityManager(new SecurityManager());
+		if(System.getSecurityManager() == null){
+			System.setSecurityManager(new SecurityManager());
+		}
 		new Starter(args);
 	}
 }
