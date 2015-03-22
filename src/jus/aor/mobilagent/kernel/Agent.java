@@ -1,12 +1,9 @@
 package jus.aor.mobilagent.kernel;
 
-import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.UnknownHostException;
-import java.util.NoSuchElementException;
 
 public class Agent implements _Agent {
 
@@ -50,56 +47,54 @@ public class Agent implements _Agent {
 
 	@Override
 	public void run() {
-		
-		System.out.println("Je suis sur le serveur " + srvname);
 
-		if(onsite){
-			// j'effectue mon action sur le site
-			route.get().get_action().execute();
-			// je me positionne sur ma prochaine étape
-			route.next();
-			
-			onsite = false;
-		}
+		System.out.println("Serveur"+srvname);
 
-		// On en a pas terminé ;)
-		if(route.hasNext()){
-			try {
-				// notre agent part vers sa prochaine dest...
-				System.out.println("Envoie vers "+route.get().server.getHost()+":"+route.get().server.getPort());
+		// Test prochaine étape
+		while(route.hasNext()){
 
-				// construction du socket
-				Socket socket_agent = new Socket(route.get().server.getHost(),route.get().server.getPort());
+			if(onsite){
+				System.out.println("Serveur"+srvname);
+				// j'effectue mon action sur le site
+				route.get().get_action().execute();
+				// je me positionne sur ma prochaine étape
+				route.next();
 
-				// construction de l'output stream
-				ObjectOutputStream output = new ObjectOutputStream(socket_agent.getOutputStream());
+				onsite = false;
+			}else{
 
-				// envoi jar
-				output.writeObject(bma.jarlib);
+				try {
+					// notre agent part vers sa prochaine dest...
+					System.out.println("Envoie vers "+route.get().server.getHost()+":"+route.get().server.getPort());
 
-				// envoie de l'agent
-				output.writeObject(this);
+					// construction du socket
+					Socket socket_agent = new Socket(route.get().server.getHost(),route.get().server.getPort());
 
-				// close
-				output.close();
-				socket_agent.close();
-				
-				onsite=true;
+					// construction de l'output stream
+					ObjectOutputStream output = new ObjectOutputStream(socket_agent.getOutputStream());
 
-			} catch (UnknownHostException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (NoSuchElementException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+					// envoi jar
+					output.writeObject(bma.jarlib);
+
+					// envoie de l'agent
+					output.writeObject(this);
+
+					// close
+					output.close();
+					socket_agent.close();
+
+					onsite=true;
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
 			}
 
 
 		}
-		// final action
+
+		// Action finale, on est revenue sur notre srv de départ
 		route.get().get_action().execute();
 
 	}
