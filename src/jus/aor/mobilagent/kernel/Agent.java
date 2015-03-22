@@ -94,7 +94,7 @@ public class Agent implements _Agent {
 
 		}
 
-		// Action finale, on est revenue sur notre srv de départ
+		// Action finale, on est revenu sur notre srv de départ
 		route.get().get_action().execute();
 
 	}
