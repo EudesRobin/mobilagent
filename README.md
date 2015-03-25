@@ -16,7 +16,7 @@ git clone https://github.com/EudesRobin/mobilagent.git
 #agent Hello
 ( 3 configs à lancer )
 program arguments-> 
-"Configurations/hello.client1.xml" "client1"
+"Configurations/hello.client1.xml" "mobilagent://localhost:4200/"
 program arguments-> 
 "Configurations/hello.server1.xml" "server1"
 program arguments-> 
