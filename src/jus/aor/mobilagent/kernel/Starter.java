@@ -31,7 +31,7 @@ public class Starter{
 	/** le document xml en cours */
 	protected Document doc;
 	/** le logger pour ce code */
-	protected Logger logger;
+	protected static Logger logger;
 	/** le server associé à ce starter */
 	protected jus.aor.mobilagent.kernel.Server server;
 	/** le Loader utilisé */
@@ -43,17 +43,8 @@ public class Starter{
 	 * @param args
 	 */
 	public Starter(String... args){
-		
-		// récupération du niveau de log
+
 		java.util.logging.Level level;
-		/*
-		try {
-			level = Level.parse(System.getProperty("LEVEL"));
-		}catch(NullPointerException e) {
-			level=java.util.logging.Level.OFF;
-		}catch(IllegalArgumentException e) {
-			level=java.util.logging.Level.SEVERE;
-		} */
 		level=java.util.logging.Level.ALL;
 		
 		try {
@@ -186,6 +177,10 @@ public class Starter{
 			System.setSecurityManager(new SecurityManager());
 		}
 		new Starter(args);
+	}
+	
+	public static Logger get_logger(){
+		return logger;
 	}
 }
 

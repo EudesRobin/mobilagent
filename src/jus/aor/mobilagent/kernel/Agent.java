@@ -4,15 +4,18 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.logging.Level;
 
 public class Agent implements _Agent  {
 
 	private static final long serialVersionUID = -5579606150122021510L;
+	private boolean todo=false;
+	protected Route route;
+
+	private transient BAMAgentClassLoader bma;
+	private transient String srvname;
 	protected transient AgentServer srv;
-	Route route;
-	protected transient BAMAgentClassLoader bma;
-	protected transient String srvname;
-	boolean todo=false;
+
 
 
 	@Override
@@ -23,8 +26,10 @@ public class Agent implements _Agent  {
 
 
 		try {
-			//init, on créé une route, étape -> action "nihil"
-			route = new Route(new Etape(new URI(serverName), _Action.NIHIL));
+			// Pour rentrer @home 
+			if(route==null){
+				route = new Route(new Etape(new URI(serverName), _Action.NIHIL));
+			}
 
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
@@ -33,71 +38,55 @@ public class Agent implements _Agent  {
 	}
 
 	@Override
-	public void init(BAMAgentClassLoader loader, AgentServer server,
-			String serverName) {
+	public void init(BAMAgentClassLoader loader, AgentServer server,String serverName) {
 		bma = loader;
 		init(server,serverName);
-
 	}
 
 	@Override
 	public void addEtape(Etape etape) {
 		route.add(etape);
-		route.hasNext=true;
 	}
 
+	/**
+	 * Boucle de l'agent : action à exec ou envoi vers sa prochaine étape
+	 */
 	@Override
 	public void run() {
 
-		System.out.println("Serveur"+srvname);
+		Starter.get_logger().log(Level.FINE,"Agent sur serveur "+srvname);
 
 
 		if(todo){
-			System.out.println("Serveur"+srvname);
-
 			route.next().get_action().execute();
+			Starter.get_logger().log(Level.FINE,"Job DONE");
 		}
-		
+
 		if(route.hasNext()){
-				try {
-					todo=true;
-					
-					// notre agent part vers sa prochaine dest...
-					System.out.println("Envoie vers "+route.get().server.getHost()+":"+route.get().server.getPort());
+			try {
+				Starter.get_logger().log(Level.FINE,"Envoi vers "+ route.get().server.getHost()+":"+route.get().server.getPort());
 
-					// construction du socket
-					Socket socket_agent = new Socket(route.get().server.getHost(),route.get().server.getPort());
+				todo=true;
 
-					// construction de l'output stream
-					ObjectOutputStream output = new ObjectOutputStream(socket_agent.getOutputStream());
+				// construction du socket
+				Socket socket_agent = new Socket(route.get().server.getHost(),route.get().server.getPort());
 
-					if(bma.jarlib == null ){
-						System.out.println("NULL JARFILE !");
-					}else{
-						System.out.println(" hashmap ... " + bma.lib.entrySet());
-					}
-					// envoi jar
-					output.writeObject(bma.jarlib);
-					System.out.println("jar envoyé");
+				// construction de l'output stream
+				ObjectOutputStream output = new ObjectOutputStream(socket_agent.getOutputStream());
 
-					// envoie de l'agent
-					output.writeObject(this);
-					System.out.println("agent envoyé");
-					// close
-					output.close();
-					socket_agent.close();
+				// envoi du repository de l'agent
+				output.writeObject(bma.getjar());
+				// envoi de l'agent
+				output.writeObject(this);
 
-					
-					
-					System.out.println("Envoie terminé");
+				output.close();
+				socket_agent.close();
 
-				} catch (Exception e) {
-					e.printStackTrace();
-					
-				}
+				Starter.get_logger().log(Level.FINE,"Envoi terminé");
+
+			} catch (Exception e) {
+				e.printStackTrace();					
+			}
 		}
-
-
 	}
-
 }

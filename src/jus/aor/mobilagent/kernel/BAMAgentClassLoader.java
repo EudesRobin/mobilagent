@@ -16,7 +16,7 @@ import java.util.Map.Entry;
 public class BAMAgentClassLoader extends URLClassLoader{
 
 	HashMap<String,byte[]> lib = new HashMap<String,byte[]>();
-	Jar jarlib;
+	private Jar jarlib;
 	
 	public BAMAgentClassLoader(URL[] urls, ClassLoader parent) {
 		super(urls, parent);	
@@ -30,7 +30,6 @@ public class BAMAgentClassLoader extends URLClassLoader{
 		try {
 			jarlib = new Jar(jar);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -44,7 +43,6 @@ public class BAMAgentClassLoader extends URLClassLoader{
 		
 		for( Entry<String, byte[]> rsc: jarlib.classIterator()){
 			IntegrateCode(rsc.getKey(),rsc.getValue());
-			System.out.println("add this in tab" + rsc.getKey());
 		}
 	}
 	
@@ -66,21 +64,20 @@ public class BAMAgentClassLoader extends URLClassLoader{
 	 * @return une instance de la classe
 	 */
 	public Class<?> findClass(String name){
-		System.out.println("param value -> " + name);
 		byte[] class_bin = lib.get(name);
+		
 		/* thx javadoc :
 		* http://docs.oracle.com/javase/7/docs/api/java/lang/ClassLoader.html
 		*/
-		if(class_bin == null){
-			try {
-				throw new Exception("Class " + name + " not found" + lib.entrySet());
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
 		return defineClass(name,class_bin,0,class_bin.length);
 	}
 
+	/**
+	 * get jar agent
+	 * @return Jar des methodes de l'agent
+	 */
+	public Jar getjar(){
+		return jarlib;
+	}
 
 }

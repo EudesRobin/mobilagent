@@ -1,16 +1,12 @@
-/**
- * J<i>ava</i> U<i>tilities</i> for S<i>tudents</i>
- */
 package jus.aor.mobilagent.kernel;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.net.InetAddress;
 import java.net.URI;
 import java.net.URL;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 /**
  * Le serveur principal permettant le lancement d'un serveur d'agents mobiles et les fonctions permettant de déployer des services et des agents.
@@ -23,22 +19,16 @@ public final class Server {
 	protected int port=10140;
 	/** le server d'agent démarré sur ce noeud */
 	protected AgentServer agentServer;
-	/** le nom du logger */
-	protected String loggerName;
-	/** le logger de ce serveur */
-	protected Logger logger=null;
+
 	/**
 	 * Démarre un serveur de type mobilagent 
-	 * @param port le port d'écuote du serveur d'agent 
+	 * @param port le port d'écoute du serveur d'agent 
 	 * @param name le nom du serveur
 	 */
 	public Server(final int port, final String name){
 		this.name=name;
 		try {
 			this.port=port;
-			/* mise en place du logger pour tracer l'application */
-			loggerName = "jus/aor/mobilagent/"+InetAddress.getLocalHost().getHostName()+"/"+this.name;
-			logger=Logger.getLogger(loggerName);
 
 			/* démarrage du server d'agents mobiles attaché à cette machine */
 			agentServer = new AgentServer(name, port);
@@ -50,7 +40,7 @@ public final class Server {
 			agentServer.start();
 
 		}catch(Exception ex){
-			logger.log(Level.FINE," erreur durant le lancement du serveur - server constr\n"+ex.toString(),ex);
+			Starter.get_logger().log(Level.WARNING," erreur durant le lancement du serveur - server constr\n"+ex.toString(),ex);
 			return;
 		}
 	}
@@ -85,7 +75,7 @@ public final class Server {
 			bms.close();
 
 		}catch(Exception ex){
-			logger.log(Level.FINE," erreur durant le lancement du serveur - add srv \n"+ex.toString(),ex);
+			Starter.get_logger().log(Level.WARNING," erreur durant le lancement du serveur - add srv \n"+ex.toString(),ex);
 			return;
 		}
 	}
@@ -111,7 +101,7 @@ public final class Server {
 			// On initialise notre agent
 			current_agent.init(bma, agentServer,name);
 
-			logger.log(Level.INFO,"Debut déploiement agent");
+			Starter.get_logger().log(Level.FINE,"Debut déploiement agent");
 			
 			// On ajoute les actions / etape !
 			if(etapeAddress.size()!=etapeAction.size()){
@@ -131,18 +121,18 @@ public final class Server {
 					
 					current_agent.addEtape(new Etape(new URI(etapeAddress.get(i)),action));
 					
-					logger.log(Level.INFO,"add etape : "+etapeAddress.get(i)+ " - action " +etapeAction.get(i));
+					Starter.get_logger().log(Level.FINE,"add etape : "+etapeAddress.get(i)+ " - action " +etapeAction.get(i));
 				}
 			}
 			if(etapeAddress.size()==0){
-				logger.log(Level.INFO,"Aucune étape ajoutée pour cet agent");
+				Starter.get_logger().log(Level.FINE,"Aucune étape ajoutée pour cet agent");
 			}
-			logger.log(Level.INFO,"Deploiement agent terminé");
+			Starter.get_logger().log(Level.FINE,"Deploiement agent terminé");
 			
 			new Thread(current_agent).start();
 
 		}catch(Exception ex){
-			logger.log(Level.FINE," erreur durant le lancement du serveur - deploy agent \n"+ex.toString(),ex);
+			Starter.get_logger().log(Level.WARNING," erreur durant le lancement du serveur - deploy agent \n"+ex.toString(),ex);
 			return;
 		}
 	}

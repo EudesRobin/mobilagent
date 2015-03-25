@@ -4,11 +4,8 @@
 package jus.aor.mobilagent.kernel;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.HashMap;
-import java.util.Map.Entry;
 import java.util.jar.JarException;
 
 /**
@@ -16,10 +13,6 @@ import java.util.jar.JarException;
  *
  */
 public class BAMServerClassLoader extends URLClassLoader {
-	
-	HashMap<String,byte[]> lib = new HashMap<String,byte[]>();
-	Jar jarlib;
-	
 	
 	public BAMServerClassLoader(URL[] urls, ClassLoader parent) {
 		super(urls, parent);
@@ -35,19 +28,7 @@ public class BAMServerClassLoader extends URLClassLoader {
 	 * @throws JarException 
 	 */
 	public void addURL(String filename) throws JarException, IOException{
-		add_jar(filename);
-		System.out.println("add srv " + lib.entrySet());
+		super.addURL(new URL(filename));
 	}
-
-	public void add_jar(String f) throws JarException, IOException{
-		if(jarlib==null){
-			jarlib = new Jar(f);
-		}
-		
-		for( Entry<String, byte[]> rsc: jarlib.classIterator()){
-			lib.put(rsc.getKey(),rsc.getValue());
-		}
-		
-	}
-
+	
 }

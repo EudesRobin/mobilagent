@@ -7,18 +7,25 @@ import java.io.ObjectStreamClass;
 
 /**
  *  @author Morat
- *  */
+ * 
+ */
 class AgentInputStream extends ObjectInputStream{
-	/**
-	 *  le classLoader à utiliser
-	 **/ 
+
 	BAMAgentClassLoader loader;
 	AgentInputStream(InputStream is, BAMAgentClassLoader cl) throws IOException{
 		super(is);
 		loader = cl;
 	}
 
-	protected Class<?> resolveClass(ObjectStreamClass cl) throws IOException,ClassNotFoundException{
-		return loader.loadClass(cl.getName());
+	protected Class<?> resolveClass(ObjectStreamClass cl) throws ClassNotFoundException, IOException{
+
+		try {
+			return loader.loadClass(cl.getName());
+		} catch (Exception e) {
+			/* echec "systématique" de l'instruction précédente, ça trouve jamais la classe... Why ?
+			*  Heureusement, super.resolveClass est là pour nous sauver \o/
+			*/
+			return super.resolveClass(cl);
+		}
 	}
 }

@@ -1,9 +1,6 @@
-/**
- * J<i>ava</i> U<i>tilities</i> for S<i>tudents</i>
- */
 package jus.aor.mobilagent.kernel;
-
 import java.io.Serializable;
+import java.util.logging.Level;
 
 /**
  * Définit une action à exécuter par un agent.
@@ -16,7 +13,7 @@ public interface _Action extends Serializable{
 		private static final long serialVersionUID = 9211608560914435550L;
 		@Override
 		public void execute() {
-			System.out.println("Action NIHIL");
+			Starter.get_logger().log(Level.FINE,"Action -> NIHIL");
 		}
 	}; 
 
