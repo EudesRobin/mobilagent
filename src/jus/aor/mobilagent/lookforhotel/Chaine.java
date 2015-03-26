@@ -1,18 +1,13 @@
 package jus.aor.mobilagent.lookforhotel;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 import jus.aor.mobilagent.kernel._Service;
 
@@ -38,17 +33,9 @@ public class Chaine implements _Chaine,_Service<List<Hotel>> {
 				localisation=attrs.getNamedItem("localisation").getNodeValue();
 				hotels.add(new Hotel(name,localisation));
 			}
-		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	/**
@@ -65,10 +52,13 @@ public class Chaine implements _Chaine,_Service<List<Hotel>> {
 		return l;
 	}
 
+	/**
+	 * Action effectuée à l'appel du service
+	 * Retourne le resultat de get
+	 * un seul param, la loc
+	 */
 	@Override
 	public List<Hotel> call(Object... params) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+		return get(params[0].toString());
 	}
-
 }
