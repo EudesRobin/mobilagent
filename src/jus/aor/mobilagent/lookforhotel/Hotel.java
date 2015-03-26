@@ -1,10 +1,6 @@
 package jus.aor.mobilagent.lookforhotel;
 
 /**
- * J<i>ava</i> U<i>tilities</i> for S<i>tudents</i>
- */
-
-/**
  * Un hotel qui est caractérisé par son nom et sa localisation.
  * @author Morat 
  */

@@ -63,6 +63,9 @@ public class Annuaire implements _Annuaire,_Service<HashMap<String,Numero>> {
 
 	}
 
+	/**
+	 * renvoie le numero matchant l'id ( nom de l'hotel )
+	 */
 	@Override
 	public Numero get(String id) {
 		return map_service.get(id);
