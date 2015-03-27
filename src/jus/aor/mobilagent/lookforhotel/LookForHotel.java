@@ -41,9 +41,7 @@ public class LookForHotel extends Agent{
 	 * @throws RemoteException
 	 */
 	public long call() {
-		// ...
-		return 0;
-		
+		return System.currentTimeMillis()-super.begin;
 	}
 	
 	/**
@@ -85,6 +83,7 @@ public class LookForHotel extends Agent{
 			for(Hotel h:hotels){
 				Starter.get_logger().log(Level.FINE,"hotel : "+ h.name + "num : " + res.get(h.name));
 			}
+			Starter.get_logger().log(Level.FINE,"durée parcours agent : " + call() + "ms");
 		}
 	};
 

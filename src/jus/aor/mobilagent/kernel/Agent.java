@@ -15,6 +15,8 @@ public class Agent implements _Agent  {
 	private transient BAMAgentClassLoader bma;
 	private transient String srvname;
 	protected transient AgentServer srv;
+	
+	protected long begin;
 
 
 
@@ -23,6 +25,7 @@ public class Agent implements _Agent  {
 		srv=agentServer;
 		srv.setName(serverName);
 		srvname = serverName;
+		begin = System.currentTimeMillis();
 
 
 		try {
@@ -30,7 +33,7 @@ public class Agent implements _Agent  {
 			if(route==null){
 				route = new Route(new Etape(new URI(serverName), _Action.NIHIL));
 			}
-
+			
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
@@ -55,7 +58,6 @@ public class Agent implements _Agent  {
 	public void run() {
 
 		Starter.get_logger().log(Level.FINE,"Agent sur serveur "+srvname);
-
 
 		if(todo){
 			route.next().get_action().execute();

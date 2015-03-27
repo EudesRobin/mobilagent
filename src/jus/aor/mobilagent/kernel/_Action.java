@@ -15,7 +15,7 @@ public interface _Action extends Serializable{
 		public void execute() {
 			Starter.get_logger().log(Level.FINE,"Action -> NIHIL");
 		}
-	}; 
+	};
 
 	/**
 	 * Exécute l'action
