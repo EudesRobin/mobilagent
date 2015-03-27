@@ -35,12 +35,8 @@ public class LookForHotel extends Agent{
 		hotels =new LinkedList<Hotel>();
 		res= new HashMap<String,Numero>();
 	}
-	/**
-	 * réalise une intérrogation
-	 * @return la durée de l'interrogation
-	 * @throws RemoteException
-	 */
-	public long call() {
+
+	public long time() {
 		return System.currentTimeMillis()-super.begin;
 	}
 	
@@ -79,11 +75,12 @@ public class LookForHotel extends Agent{
 		private static final long serialVersionUID = -5492276424526198603L;
 
 		@Override
-		public void execute() {	
+		public void execute() {
+			long tmp = time();
 			for(Hotel h:hotels){
-				Starter.get_logger().log(Level.FINE,"hotel : "+ h.name + "num : " + res.get(h.name));
+				Starter.get_logger().log(Level.FINE,"hotel : "+ h.name + " num : " + res.get(h.name));
 			}
-			Starter.get_logger().log(Level.FINE,"durée parcours agent : " + call() + "ms");
+			Starter.get_logger().log(Level.FINE,"durée parcours agent : " + tmp + "ms");
 		}
 	};
 

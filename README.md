@@ -26,4 +26,19 @@ VM arguments -> -Djava.security.policy=.policy # fichier à la racine du projet
 ( idem pour les 3 configs )
 ```
 
+```
+#agent LookForHotel
+( 4 configs à lancer )
+program arguments-> 
+"Configurations/hostel.client1.xml" "mobilagent://localhost:1111/"
+program arguments-> 
+"Configurations/hostel.server1.xml" "server1"
+program arguments-> 
+"Configurations/hostel.server2.xml" "server2"
+program arguments-> 
+"Configurations/hostel.server3.xml" "server3"
+
+VM arguments -> -Djava.security.policy=.policy # fichier à la racine du projet
+( idem pour les 3 configs )
+```
 
