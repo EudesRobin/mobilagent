@@ -85,7 +85,9 @@ public class Agent implements _Agent  {
 				Starter.get_logger().log(Level.FINE,"Envoi terminé");
 
 			} catch (Exception e) {
-				e.printStackTrace();					
+				// serveur injoignable
+				Starter.get_logger().log(Level.WARNING,"Serveur" + route.get().server.getHost()+":"+route.get().server.getPort()+ " injoignable");
+				todo=true;
 			}
 		}
 	}

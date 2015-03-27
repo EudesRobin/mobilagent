@@ -15,13 +15,13 @@ public class Chaine implements _Chaine,_Service<List<Hotel>> {
 	
 	List<Hotel> hotels = new LinkedList<Hotel>();
 
-	public Chaine(String...args) {
+	public Chaine(Object...args) {
 		/* récupération des hôtels de la chaîne dans le fichier xml passé en 1er argument */
 		DocumentBuilder docBuilder = null;
 		Document doc=null;
 		try {
 			docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-			doc = docBuilder.parse(new File(args[0]));
+			doc = docBuilder.parse(new File((String)args[0]));
 
 			String name, localisation;
 			NodeList list = doc.getElementsByTagName("Hotel");

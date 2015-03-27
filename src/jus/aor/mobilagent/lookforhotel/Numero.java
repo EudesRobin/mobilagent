@@ -1,5 +1,7 @@
 package jus.aor.mobilagent.lookforhotel;
 
+import java.io.Serializable;
+
 /**
  * J<i>ava</i> U<i>tilities</i> for S<i>tudents</i>
  */
@@ -8,7 +10,8 @@ package jus.aor.mobilagent.lookforhotel;
  * Un numéro de téléphone
  * @author Morat 
  */
-public class Numero {
+public class Numero implements Serializable {
+	private static final long serialVersionUID = 126931326674332301L;
 	/** le numéro de téléphone */
 	public String numero;
 	/**

@@ -21,14 +21,14 @@ public class Annuaire implements _Annuaire,_Service<HashMap<String,Numero>> {
 	String name, numero;
 	HashMap<String,Numero> map_service = new HashMap<String,Numero>();
 
-	public Annuaire(String... src) {
+	public Annuaire(Object... src) {
 
 		/* Récupération de l'annuaire dans le fichier xml */
 		DocumentBuilder docBuilder = null;
 		Document doc=null;
 		try {
 			docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-			doc = docBuilder.parse(new File(src[0]));
+			doc = docBuilder.parse(new File((String)src[0]));
 
 
 			NodeList list = doc.getElementsByTagName("Telephone");

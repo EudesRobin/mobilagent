@@ -29,9 +29,9 @@ public class LookForHotel extends Agent{
 	 * @param args les arguments n'en comportant qu'un seul qui indique le critère
 	 *          de localisation
 	 */
-	public LookForHotel(String... args){
+	public LookForHotel(Object... args){
 		super();
-		localisation = args[0];
+		localisation = (String)args[0];
 		hotels =new LinkedList<Hotel>();
 		res= new HashMap<String,Numero>();
 	}

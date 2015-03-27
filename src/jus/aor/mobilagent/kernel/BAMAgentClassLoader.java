@@ -8,7 +8,6 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.HashMap;
 import java.util.Map.Entry;
-
 /**
  * @author eudes
  *
@@ -64,8 +63,9 @@ public class BAMAgentClassLoader extends URLClassLoader{
 	 * @return une instance de la classe
 	 */
 	public Class<?> findClass(String name){
-		byte[] class_bin = lib.get(name);
 		
+		byte[] class_bin = lib.get(name);
+
 		/* thx javadoc :
 		* http://docs.oracle.com/javase/7/docs/api/java/lang/ClassLoader.html
 		*/
