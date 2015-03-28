@@ -1,14 +1,18 @@
 package jus.aor.mobilagent.lookforhotel;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 
 import jus.aor.mobilagent.kernel.Agent;
 import jus.aor.mobilagent.kernel.Starter;
 import jus.aor.mobilagent.kernel._Action;
 import jus.aor.mobilagent.kernel._Service;
+import jus.aor.rmi.lookforhotel.Numero;
 
 /**
  * Représente un client effectuant une requête lui permettant
@@ -77,9 +81,15 @@ public class LookForHotel extends Agent{
 		@Override
 		public void execute() {
 			long tmp = time();
-			for(Hotel h:hotels){
-				Starter.get_logger().log(Level.FINE,"hotel : "+ h.name + " num : " + res.get(h.name));
+			
+			Set<?> s = res.entrySet();
+			Iterator<?> it = s.iterator();
+			while(it.hasNext()){
+				@SuppressWarnings("unchecked")
+				Map.Entry<String,Numero> ent = (Map.Entry<String,Numero>)it.next();
+				Starter.get_logger().log(Level.FINE,ent.getKey() + ": " + ent.getValue());
 			}
+			
 			Starter.get_logger().log(Level.FINE,"durée parcours agent : " + tmp + "ms");
 		}
 	};
