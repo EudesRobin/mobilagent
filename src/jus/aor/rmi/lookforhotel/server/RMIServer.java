@@ -14,14 +14,7 @@ import jus.aor.rmi.lookforhotel._Chaine;
 public class RMIServer {
 
 	/**
-	 * 
-	 */
-	public RMIServer() {
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @param args
+	 * @param args 3 args requis : <service_name> <filename> <port_serveur>
 	 * @throws Exception 
 	 */
 	public static void main(String[] args) throws Exception {
