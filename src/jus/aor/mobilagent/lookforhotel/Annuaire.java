@@ -17,19 +17,18 @@ import org.w3c.dom.NodeList;
  *
  */
 public class Annuaire implements _Annuaire,_Service<HashMap<String,Numero>> {
-
-	String name, numero;
-	HashMap<String,Numero> map_service = new HashMap<String,Numero>();
+	
+	private HashMap<String,Numero> annuaire = new HashMap<String,Numero>();
 
 	public Annuaire(Object... src) {
 
+		String name, numero;
 		/* Récupération de l'annuaire dans le fichier xml */
 		DocumentBuilder docBuilder = null;
 		Document doc=null;
 		try {
 			docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			doc = docBuilder.parse(new File((String)src[0]));
-
 
 			NodeList list = doc.getElementsByTagName("Telephone");
 			NamedNodeMap attrs;
@@ -39,7 +38,7 @@ public class Annuaire implements _Annuaire,_Service<HashMap<String,Numero>> {
 				name=attrs.getNamedItem("name").getNodeValue();
 				numero=attrs.getNamedItem("numero").getNodeValue();
 				// add val in hashmap
-				map_service.put(name, new Numero(numero));
+				annuaire.put(name, new Numero(numero));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -51,7 +50,7 @@ public class Annuaire implements _Annuaire,_Service<HashMap<String,Numero>> {
 	 */
 	@Override
 	public Numero get(String id) {
-		return map_service.get(id);
+		return annuaire.get(id);
 	}
 
 	/**
@@ -62,6 +61,7 @@ public class Annuaire implements _Annuaire,_Service<HashMap<String,Numero>> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public HashMap<String, Numero> call(Object... params) throws IllegalArgumentException {
+		
 		List<Hotel> hotels = (List<Hotel>) params[0];
 		HashMap<String,Numero> cmp = new HashMap<String,Numero>();
 
