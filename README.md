@@ -71,3 +71,46 @@ Les annuaires doivent logiquement être positionés APRES les descriptions des c
 le/les annuaire(s) suivant une liste d'hotels construites suivant les matchs avec la localisation passée en param.
 
 rmq : on peut donc interroger des chaines avec différents params de localisation.
+
+
+```
+# Serveur RMI Courtage...
+( 5 configs à lancer ou plus...)
+
+#le serveur RMI "annuaire"
+"Courtage" "5555"
+( main class : jus.aor.courtage.kernel.RMIcourtage )
+
+Pour la suite, on revient au starter :
+( main class : jus.aor.courtage.kernel.Starter )
+#le serveur annuaire
+program arguments-> 
+"Configurations/srv-annuaire3.xml" "mobilagent://localhost:4444/" "" "localhost" "5555"
+
+#le serveur chaine1
+program arguments-> 
+"Configurations/srv-chaine1.xml" "mobilagent://localhost:2222/" "" "localhost" "5555"
+
+#le serveur chaine2
+program arguments-> 
+"Configurations/srv-chaine2.xml" "mobilagent://localhost:3333/" "" "localhost" "5555"
+
+#le client
+program arguments-> 
+"Configurations/courtier_client.xml" "mobilagent://localhost:1111/" "first" "localhost" "5555"
+
+VM arguments -> -Djava.security.policy=.policy # fichier à la racine du projet
+( idem pour les 5 configs )
+```
+
+On doit lancer impérativement le serveur RMI en premier, chaque serveur du bam s'enregistre ensuite dessus.
+Le client à la fin. Deux choix pour la selection de service : "all" ou "first". Dans le cas de first, le client aura une seule et unique étape vers le premier serveur dispo ayant le service qui l'interesse. Avec all, on ajoutera une étape par serveur dispo pour le service en question.
+
+ex avec first.
+(ordre d'enregistrement et de dispo)
+srv 1 -> service Hotels
+srv 2 -> service Hotels
+srv 3 -> service Telephones
+
+Un client faisant des appels à get_hotels ( service hotel ) et get_nums (service Telephones ) ira voir uniquement
+le srv 1 et srv 3. Avec une politique all, il serait allé voir srv1, srv 2 et srv 3.

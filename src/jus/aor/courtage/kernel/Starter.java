@@ -61,11 +61,11 @@ public class Starter{
 			// Création du serveur 
 			createServer(port,args[1]);
 			// ajout des services
-			addServices();
+			addServices(args[3],Integer.parseInt(args[4]));
 			// déploiement d'agents
-			deployAgents();
+			deployAgents(args[2],args[3],Integer.parseInt(args[4]));
 		}catch(Exception ex){
-			logger.log(Level.FINE,"Ce programme nécessite un argument : <conf file> <name server>\n"+ex.toString(),ex);
+			logger.log(Level.FINE,"Ce programme nécessite un argument : <conf file> <name server> <selection type first/all> <rmi server name> <rmi server port>\n"+ex.toString(),ex);
 			return;
 		}
 	}
@@ -78,7 +78,7 @@ public class Starter{
 	/**
 	 * Ajoute les services définis dans le fichier de configuration
 	 */
-	protected void addServices() {
+	protected void addServices(String rmisrv,Integer rmiport) {
 		NamedNodeMap attrs;
 		Object[] args;
 		String codeBase, classeName, name;
@@ -88,7 +88,7 @@ public class Starter{
 			classeName = attrs.getNamedItem("class").getNodeValue();
 			args = attrs.getNamedItem("args").getNodeValue().split(" ");
 			name = attrs.getNamedItem("name").getNodeValue();
-			addService(name, classeName, codeBase, args);
+			addService(name, classeName, codeBase,rmisrv,rmiport, args);
 		}
 	}
 	/**
@@ -98,9 +98,9 @@ public class Starter{
 	 * @param codeBase le code du service
 	 * @param args les arguments de la construction du service
 	 */
-	protected void addService(String name, String classeName, String codeBase, Object... args) {
+	protected void addService(String name, String classeName, String codeBase,String rmisrv,Integer rmiport, Object... args) {
 		try{
-			server.addService(name,classeName,codeBase,args);
+			server.addService(name,classeName,codeBase,rmisrv,rmiport,args);
 		}catch(Exception e){
 			logger.log(Level.FINE," erreur durant l'ajout d'un service",e);
 		}
@@ -108,7 +108,7 @@ public class Starter{
 	/**
 	 * déploiement les agents définis dans le fichier de configuration
 	 */
-	protected void deployAgents() {
+	protected void deployAgents(String select,String rmisrv,Integer rmiport) {
 		NamedNodeMap attrsAgent, attrsEtape;
 		Object[] args=null;
 		String codeBase;
@@ -125,7 +125,7 @@ public class Starter{
 				serverAction.add(attrsEtape.getNamedItem("action").getNodeValue());
 				serverAddress.add(attrsEtape.getNamedItem("server").getNodeValue());
 			}
-			deployAgent(classeName, args, codeBase,serverAddress, serverAction);
+			deployAgent(classeName, args, codeBase,serverAddress, serverAction,select,rmisrv,rmiport);
 		}
 	}
 	/**
@@ -136,9 +136,9 @@ public class Starter{
 	 * @param serverAddress la liste des serveurs des étapes
 	 * @param serverAction la liste des actions des étapes
 	 */
-	protected void deployAgent(String classeName, Object[] args, String codeBase, List<String> serverAddress, List<String> serverAction) {
+	protected void deployAgent(String classeName, Object[] args, String codeBase, List<String> serverAddress, List<String> serverAction,String select,String rmisrv,Integer rmiport) {
 		try{
-			server.deployAgent(classeName,args,codeBase,serverAddress,serverAction);
+			server.deployAgent(classeName,args,codeBase,serverAddress,serverAction,select,rmisrv,rmiport);
 		}catch(Exception e){
 			logger.log(Level.FINE," erreur durant le déploiement de l'agent",e);
 		}

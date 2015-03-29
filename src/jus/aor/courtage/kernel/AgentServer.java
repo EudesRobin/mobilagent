@@ -51,14 +51,14 @@ public class AgentServer extends Thread {
 	 * @param name nom du service
 	 * @param service class du service
 	 */
-	public void addService(String name, _Service<?> service) {
+	public void addService(String name, _Service<?> service,String rmisrv,Integer rmiport) {
 		if(!services.containsKey(name)){
 			services.put(name, service);
 		}
 		
 		Registry registry;
 		try {
-			registry = LocateRegistry.getRegistry(InetAddress.getByName("localhost").getHostAddress(),5555);
+			registry = LocateRegistry.getRegistry(InetAddress.getByName(rmisrv).getHostAddress(),rmiport);
 			_Registre stub = (_Registre) registry.lookup("Courtage");
 			stub.registerservice(name,new URI(this.name+":"+this.port));;
 		} catch (RemoteException | UnknownHostException | NotBoundException | URISyntaxException e) {
