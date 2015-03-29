@@ -44,11 +44,11 @@ VM arguments -> -Djava.security.policy=.policy # fichier à la racine du projet
 
 ```
 # LookForHotel version RMI
-( 3 configs à lancer )
+( 4 configs à lancer )
 
 #le client
 program arguments-> 
-"localhost" "1111" "Chaine" "Paris" "localhost" "2222" "Annuaire"
+"localhost" "1111" "Chaine" "Paris" "localhost" "3333" "Chaine" "Paris" "localhost" "2222" "Annuaire"
 
 #le serveur annuaire
 program arguments-> 
@@ -58,8 +58,12 @@ program arguments->
 program arguments-> 
 "Chaine" "DataStore/Hotels1.xml" "1111"
 
+#le serveur chaine2
+program arguments-> 
+"Chaine" "DataStore/Hotels2.xml" "3333"
+
 VM arguments -> -Djava.security.policy=.policy # fichier à la racine du projet
-( idem pour les 3 configs )
+( idem pour les 4 configs )
 ```
 
 Pour les params du client , on peut ajouter N chaines d'hotels , ou N annuaires.
