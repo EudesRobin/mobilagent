@@ -100,6 +100,7 @@ public class RMIClient {
 			logger.log(Level.FINE,ent.getKey()+" : "+ent.getValue());
 		}
 		logger.log(Level.FINE,"Durée interrogation (hors affichage) :"+(end-begin)+" ms");
+		logger.log(Level.FINE,"Nombre d'hotels : " + hotels.size());
 
 	}
 

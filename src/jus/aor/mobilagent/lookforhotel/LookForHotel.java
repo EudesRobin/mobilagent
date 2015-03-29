@@ -90,7 +90,8 @@ public class LookForHotel extends Agent{
 				Starter.get_logger().log(Level.FINE,ent.getKey() + ": " + ent.getValue());
 			}
 			
-			Starter.get_logger().log(Level.FINE,"durée parcours agent : " + tmp + "ms");
+			Starter.get_logger().log(Level.FINE,"durée parcours agent (hors affichage) : " + tmp + "ms");
+			Starter.get_logger().log(Level.FINE,"Nombre d'hotels : " + hotels.size());
 		}
 	};
 

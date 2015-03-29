@@ -1,0 +1,23 @@
+BAM LookForHotel - Recherche des Hotels de Paris - 3 serveurs ( chaine 1 , 2 + annuaire)
+durée parcours agent (hors affichage) : 5ms
+Nombre d'hotels : 19991
+
+BAM LookForHotel - Recherche des Hotels de Grenoble - 3 serveurs ( chaine 1 , 2 + annuaire)
+durée parcours agent (hors affichage) : 2ms
+Nombre d'hotels : 10
+
+>> CCL : La durée du service ne semble pas être impactée par le critère de recherche, les variations autour de la durée
+dépendent plus de l'utilisation actuelle de la carte réseau par l'OS qu'autre chose.
+
+RMI ?
+- Recherche des Hotels de Paris - 3 serveurs ( chaine 1 , 2 + annuaire)
+Durée interrogation (hors affichage) :3656 ms
+Nombre d'hotels : 19991
+
+- Recherche des Hotels de Grenoble - 3 serveurs ( chaine 1 , 2 + annuaire)
+Durée interrogation (hors affichage) :319 ms
+Nombre d'hotels : 10
+
+>> CCL : La durée du service est directement impactée par la taille de la liste d'hotels à rechercher dans l'annuaire.
+En effet, pour chaque hotel -> un appel RMI au service Annuaire... En effet, dans la solution BAM, l'agent se déplace sur chaque serveur,
+ainsi, les accès sont bien plus rapides puisque locaux.
