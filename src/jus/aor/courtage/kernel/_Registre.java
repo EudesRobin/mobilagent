@@ -3,6 +3,7 @@ package jus.aor.courtage.kernel;
 import java.net.URI;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.LinkedList;
 
 public interface _Registre extends Remote{
 	
@@ -29,5 +30,13 @@ public interface _Registre extends Remote{
 	 * @throws RemoteException
 	 */
 	public void updateservice(String name,URI src,boolean availability) throws RemoteException;
+	
+	/**
+	 * Retourne la liste des serveurs disponibles pour le service recherché
+	 * @param name service recherché
+	 * @return liste des serveurs disponibles
+	 * @throws RemoteException
+	 */
+	public LinkedList<URI> getservice(String name) throws RemoteException;
 	
 }

@@ -5,6 +5,7 @@ package jus.aor.courtage.kernel;
 
 import java.net.URI;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -12,9 +13,16 @@ import java.util.LinkedList;
  * @author eudes
  *
  */
-public class Registre implements _Registre {
+public class Registre extends UnicastRemoteObject implements _Registre {
 
-	HashMap<String,LinkedList<Regfield>> registre = new HashMap<String,LinkedList<Regfield>>();
+	private static final long serialVersionUID = -5380643427313088389L;
+	HashMap<String,LinkedList<Regfield>> registre;
+
+	protected Registre() throws RemoteException {
+		super();
+		registre=new HashMap<String,LinkedList<Regfield>>();
+	}
+
 
 	@Override
 	public void registerservice(String name, URI src) throws RemoteException {
@@ -44,6 +52,18 @@ public class Registre implements _Registre {
 			}
 		}
 
+	}
+
+
+	@Override
+	public LinkedList<URI> getservice(String name) throws RemoteException {
+		LinkedList<URI> tmp = new LinkedList<URI>();
+		for(Regfield r:registre.get(name)){
+			if(r.av){
+				tmp.add(r.serveur);
+			}
+		}
+		return tmp;
 	}
 
 }
