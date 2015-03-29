@@ -40,7 +40,6 @@ public class Registre extends UnicastRemoteObject implements _Registre {
 		}
 		// On ajoute le serveur proposant ce service à la liste
 		registre.get(name).add(new Regfield(src,availability));
-
 	}
 
 	@Override

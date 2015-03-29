@@ -33,11 +33,11 @@ public class Starter{
 	/** le logger pour ce code */
 	protected static Logger logger;
 	/** le server associé à ce starter */
-	protected jus.aor.mobilagent.kernel.Server server;
+	protected jus.aor.courtage.kernel.Server server;
 	/** le Loader utilisé */
 	protected BAMServerClassLoader loader;
 	/** la classe du server : jus.aor.mobilagent.kernel.Server */
-	protected Class<jus.aor.mobilagent.kernel.Server> classe;
+	protected Class<jus.aor.courtage.kernel.Server> classe;
 	/**
 	 * 
 	 * @param args
@@ -49,7 +49,7 @@ public class Starter{
 		
 		try {
 			/* Mise en place du logger pour tracer l'application */
-			String loggerName = "jus/aor/mobilagent/"+InetAddress.getLocalHost().getHostName()+"/"+args[1];
+			String loggerName = "jus/aor/courtage/"+InetAddress.getLocalHost().getHostName()+args[1];
 			logger = Logger.getLogger(loggerName);
 			//logger.setUseParentHandlers(false);
 			logger.addHandler(new IOHandler());
@@ -71,8 +71,8 @@ public class Starter{
 	}
 	@SuppressWarnings("unchecked")
 	protected void createServer(int port, String name) throws MalformedURLException, ClassNotFoundException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-		loader = new BAMServerClassLoader(new URL[]{new URL("file:///lib/MobilagentServer.jar")},this.getClass().getClassLoader());
-		classe = (Class<jus.aor.mobilagent.kernel.Server>)Class.forName("jus.aor.mobilagent.kernel.Server",true,loader);
+		loader = new BAMServerClassLoader(new URL[]{new URL("file:///lib/MobilagentServer2.jar")},this.getClass().getClassLoader());
+		classe = (Class<jus.aor.courtage.kernel.Server>)Class.forName("jus.aor.courtage.kernel.Server",true,loader);
 		server = classe.getConstructor(int.class,String.class).newInstance(port,name);
 	}
 	/**

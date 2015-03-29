@@ -49,7 +49,7 @@ public class RMIcourtage {
 				// exportobject déjà réalisé car la classe extends UnicastRemoteObject
 				skeleton = (_Registre)new Registre();
 				Registry registry = LocateRegistry.createRegistry(Integer.parseInt(args[1]));
-				registry.rebind("Chaine",skeleton);
+				registry.rebind("Courtage",skeleton);
 				logger.log(Level.FINE,"Service Courtage disponible");
 			}else{
 				logger.log(Level.WARNING,"Service demandé inconnu");

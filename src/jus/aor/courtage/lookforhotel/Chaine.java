@@ -9,7 +9,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
-import jus.aor.mobilagent.kernel._Service;
+import jus.aor.courtage.kernel._Service;
 
 public class Chaine implements _Chaine,_Service<List<Hotel>> {
 	

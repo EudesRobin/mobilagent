@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import jus.aor.mobilagent.kernel._Service;
+import jus.aor.courtage.kernel._Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;

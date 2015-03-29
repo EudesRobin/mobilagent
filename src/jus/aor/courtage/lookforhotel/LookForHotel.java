@@ -8,11 +8,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 
-import jus.aor.mobilagent.kernel.Agent;
-import jus.aor.mobilagent.kernel.Starter;
-import jus.aor.mobilagent.kernel._Action;
-import jus.aor.mobilagent.kernel._Service;
-import jus.aor.rmi.lookforhotel.Numero;
+import jus.aor.courtage.kernel.Agent;
+import jus.aor.courtage.kernel.Starter;
+import jus.aor.courtage.kernel._Action;
+import jus.aor.courtage.kernel._Service;
+import jus.aor.courtage.lookforhotel.Numero;
 
 /**
  * Représente un client effectuant une requête lui permettant

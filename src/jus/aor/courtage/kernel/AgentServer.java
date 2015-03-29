@@ -1,9 +1,17 @@
 package jus.aor.courtage.kernel;
 import java.io.InputStream;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.UnknownHostException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.HashMap;
 import java.util.logging.Level;
 
@@ -25,7 +33,7 @@ public class AgentServer extends Thread {
 
 		this.name=name;
 		this.port=port;
-		URL jar = new URL("file:///lib/MobilagentServer.jar");
+		URL jar = new URL("file:///lib/MobilagentServer2.jar");
 		bms = new BAMServerClassLoader(new URL[]{jar},this.getClass().getClassLoader());
 
 	}
@@ -47,6 +55,16 @@ public class AgentServer extends Thread {
 		if(!services.containsKey(name)){
 			services.put(name, service);
 		}
+		
+		Registry registry;
+		try {
+			registry = LocateRegistry.getRegistry(InetAddress.getByName("localhost").getHostAddress(),5555);
+			_Registre stub = (_Registre) registry.lookup("Courtage");
+			stub.registerservice(name,new URI(this.name+":"+this.port));;
+		} catch (RemoteException | UnknownHostException | NotBoundException | URISyntaxException e) {
+			e.printStackTrace();
+		}
+
 
 	}
 	/**
