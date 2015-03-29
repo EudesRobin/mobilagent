@@ -36,7 +36,7 @@ public class Starter{
 	protected jus.aor.courtage.kernel.Server server;
 	/** le Loader utilisé */
 	protected BAMServerClassLoader loader;
-	/** la classe du server : jus.aor.mobilagent.kernel.Server */
+	/** la classe du server : jus.aor.courtage.kernel.Server */
 	protected Class<jus.aor.courtage.kernel.Server> classe;
 	/**
 	 * 

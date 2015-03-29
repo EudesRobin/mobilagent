@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE HTML PUBLIC  "-//W3C//DTD HTML 4.0 Transitional//EN" "Server.dtd"> 
+<server>
+	<port value="1111"/>
+
+	<agent class="jus.aor.courtage.lookforhotel.LookForHotel" codebase="lib/LookForHotel2.jar" args="Grenoble">
+		<etape server="mobilagent://localhost:2222/" action="get_hotels" />
+		<etape server="mobilagent://localhost:3333/" action="get_hotels" />
+		<etape server="mobilagent://localhost:4444/" action="get_nums" />
+		<etape server="mobilagent://localhost:1111/" action="print" />
+	</agent>
+
+</server>

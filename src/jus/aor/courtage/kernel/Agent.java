@@ -11,6 +11,7 @@ public class Agent implements _Agent  {
 	private static final long serialVersionUID = -5579606150122021510L;
 	private boolean todo=false;
 	protected Route route;
+	private boolean first=true;
 
 	private transient BAMAgentClassLoader bma;
 	private transient String srvname;
@@ -59,6 +60,11 @@ public class Agent implements _Agent  {
 
 		Starter.get_logger().log(Level.FINE,"Agent sur serveur "+srvname);
 
+		if(first){
+			first=false;
+			// On va supposer qu'on prend le premier dispo pour chaque service demandé.
+		}
+		
 		if(todo){
 			route.next().get_action().execute();
 			Starter.get_logger().log(Level.FINE,"Job DONE");
