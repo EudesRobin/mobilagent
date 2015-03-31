@@ -120,7 +120,7 @@ public final class Server {
 			if(etapeAddress.size()!=etapeAction.size()){
 				throw new Exception("Chaque etape doit avoir une action associée !");
 			}else{
-
+				Starter.get_logger().log(Level.FINE,"policy >"+ select);
 				for(int i=0;i<etapeAddress.size();i++){
 
 					/*
@@ -158,7 +158,6 @@ public final class Server {
 		/**
 		 * Pour l'instant, on choisit le premier serveur disponible fournissant le service demandé.
 		 */
-
 		try {
 			if(select.equalsIgnoreCase("first")){
 				if(desc_action.equalsIgnoreCase("get_hotels")&&!firsth){
