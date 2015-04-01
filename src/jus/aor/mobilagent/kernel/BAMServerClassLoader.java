@@ -75,6 +75,7 @@ public class BAMServerClassLoader extends URLClassLoader {
 		lib.put(name, code);
 	}
 	
+	@Override
 	public Class<?> findClass(String name){
 		byte[] class_bin = lib.get(name);
 		
