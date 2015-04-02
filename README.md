@@ -1,5 +1,5 @@
 # mobilagent
-RICM4 - AR - Polytech' Grenoble
+RICM4 - AR - TP Mobilagent RMI - Polytech' Grenoble
 
 Initialisation :
 --------
