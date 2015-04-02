@@ -25,12 +25,12 @@ public class Registre extends UnicastRemoteObject implements _Registre {
 
 
 	@Override
-	public void registerservice(String name, URI src) throws RemoteException {
+	public synchronized void registerservice(String name, URI src) throws RemoteException {
 		registerservice(name,src,true);
 	}
 
 	@Override
-	public void registerservice(String name, URI src, boolean availability)
+	public synchronized void registerservice(String name, URI src, boolean availability)
 			throws RemoteException {
 		/**
 		 * Si le service n'a jamais été add, on créé l'entrée
@@ -43,7 +43,7 @@ public class Registre extends UnicastRemoteObject implements _Registre {
 	}
 
 	@Override
-	public void updateservice(String name, URI src, boolean availability)
+	public synchronized void updateservice(String name, URI src, boolean availability)
 			throws RemoteException {
 		for(Regfield r:registre.get(name)){
 			if(r.serveur.equals(src)){
@@ -55,7 +55,7 @@ public class Registre extends UnicastRemoteObject implements _Registre {
 
 
 	@Override
-	public LinkedList<URI> getservice(String name) throws RemoteException {
+	public synchronized LinkedList<URI> getservice(String name) throws RemoteException {
 		LinkedList<URI> tmp = new LinkedList<URI>();
 		for(Regfield r:registre.get(name)){
 			if(r.av){
